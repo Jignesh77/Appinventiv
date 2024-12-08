@@ -1,17 +1,19 @@
-/**
- * @format
- */
-
-import 'react-native';
 import React from 'react';
+import { render } from '@testing-library/react-native';
 import App from '../App';
 
-// Note: import explicitly to use the types shipped with jest.
-import {it} from '@jest/globals';
+// Mock the RootNavigator
+jest.mock('../src/navigation/RootNavigator', () => {
+  return function MockRootNavigator() {
+    return <mock-view testID="root-navigator" />;
+  };
+});
 
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
+describe('App Component', () => {
+  it('renders the navigation container with RootNavigator', () => {
+    const { getByTestId } = render(<App />);
 
-it('renders correctly', () => {
-  renderer.create(<App />);
+    // Check if the NavigationContainer is rendered
+    expect(getByTestId('root-navigator')).toBeTruthy();
+  });
 });
